@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: py-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: py-depl
+  template:
+    metadata:
+      labels:
+        app: py-depl
+    spec:
+      containers:
+        - name: py-depl
+          image: sonnemon/py-depl
+          env:
+            - name: PYTHONUNBUFFERED
+              value: "1"
+            - name: PYTHONIOENCODING
+              value: "UTF-8"
+            # - name: PYTHONPATH
+            #   value: "src"
+          envFrom:
+            - secretRef:
+                name: env-rabbit
+      dnsPolicy: None
+      dnsConfig:
+        nameservers:
+          - 10.148.64.24
+          - 10.190.105.61
+        searches:
+          - quanticotrends.com
+      restartPolicy: Always

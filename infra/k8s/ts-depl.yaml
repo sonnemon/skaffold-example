@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ts-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ts-depl
+  template:
+    metadata:
+      labels:
+        app: ts-depl
+    spec:
+      containers:
+        - name: ts-depl
+          image: sonnemon/ts-depl
+          # env:
+          #   - name: MYSQL_DATABASE
+          #     value: "twitter_stream"
+          envFrom:
+            - secretRef:
+                name: env-rabbit
+      dnsPolicy: None
+      dnsConfig:
+        nameservers:
+          - 10.148.64.24
+          - 10.190.105.61
+        searches:
+          - quanticotrends.com
+      restartPolicy: Always

@@ -1,0 +1,29 @@
+apiVersion: skaffold/v2beta11
+kind: Config
+metadata:
+  name: skaffold-test
+build:
+  local:
+    push: false
+  artifacts:
+  - image: sonnemon/py-depl
+    context: python
+    docker:
+      dockerfile: Dockerfile
+    sync:
+      manual:
+        - src: "src/**/*.py"
+          dest: .
+  - image: sonnemon/ts-depl
+    context: typescript
+    docker:
+      dockerfile: Dockerfile
+    sync:
+      manual:
+        - src: "src/**/*.ts"
+          dest: .
+deploy:
+  kubectl:
+    manifests:
+    - infra/k8s/py-depl.yaml
+    - infra/k8s/ts-depl.yaml
